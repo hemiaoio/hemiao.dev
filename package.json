@@ -1,0 +1,41 @@
+{
+  "name": "hemiao.dev",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "何苗的个人网站 · 静态站点 + 构建期预渲染",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite-ssg build && node scripts/generate-sitemap.mjs",
+    "build:only": "vite-ssg build && node scripts/generate-sitemap.mjs",
+    "preview": "vite preview --port 4173",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@unhead/vue": "^2.1.17",
+    "@vicons/ionicons5": "^0.13.0",
+    "naive-ui": "^2.45.3",
+    "vue": "^3.5.43",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "beasties": "^0.3.5",
+    "eslint": "^10.11.0",
+    "eslint-plugin-vue": "^10.11.1",
+    "prettier": "^3.9.9",
+    "sass": "^1.105.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.1",
+    "vite-ssg": "^28.3.0",
+    "vue-tsc": "^3.3.11"
+  }
+}

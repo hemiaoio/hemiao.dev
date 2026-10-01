@@ -1,0 +1,23 @@
+node_modules/
+dist/
+dist-ssr/
+.vite-ssg-temp/
+.dist-stale/
+coverage/
+*.local
+*.log
+*.tsbuildinfo
+.vite/
+
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# 代理工具目录（沿用上游 miaoapp / aigc-lab 的惯例：不入版本库）
+.workbuddy/
+.claude/
+.agents/skills/
