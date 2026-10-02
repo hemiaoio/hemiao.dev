@@ -1,0 +1,67 @@
+name: Deploy to GitHub Pages
+
+# 只在 main 分支推进时部署，另外保留手动触发（用于排查问题时重跑）。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 部署 Pages 所需的最小权限集：
+#   pages: write   → 允许写入 Pages
+#   id-token: write → 允许 deploy-pages 用 OIDC 换取部署凭证（不再需要 PAT）
+#   contents: read  → 只读仓库，CLI 默认给的就是这个
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时刻只跑一个部署；不取消进行中的那个，避免把已开始的上线打断在中间状态。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v7
+
+      # pnpm 版本从 package.json 的 packageManager 字段读取，避免这里再写一遍造成两处不一致。
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      # 这一步内含 vue-tsc 类型检查 + vite-ssg 预渲染 + 生成 sitemap。
+      - name: 构建
+        run: pnpm build
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v6
+
+      - name: 上传产物
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+          # 关键：该 action 默认 exclude 所有点开头的文件，会把 .nojekyll 一起丢掉。
+          # 必须显式打开，否则 GitHub Pages 会退回 Jekyll 预处理。
+          include-hidden-files: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

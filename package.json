@@ -4,13 +4,14 @@
   "private": true,
   "type": "module",
   "description": "何苗的个人网站 · 静态站点 + 构建期预渲染",
+  "packageManager": "pnpm@10.6.3",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite-ssg build && node scripts/generate-sitemap.mjs",
-    "build:only": "vite-ssg build && node scripts/generate-sitemap.mjs",
+    "build": "vue-tsc --noEmit && vite-ssg build && node scripts/generate-sitemap.mjs && node scripts/clean-dist.mjs",
+    "build:only": "vite-ssg build && node scripts/generate-sitemap.mjs && node scripts/clean-dist.mjs",
     "preview": "vite preview --port 4173",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --fix",

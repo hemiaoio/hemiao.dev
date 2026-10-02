@@ -23,6 +23,9 @@ const pages = walk(DIST)
   .map((file) => relative(DIST, file).split(sep).join('/'))
   // 排除隐藏文件等意外产物（如曾经出现过的 dist/.html）
   .filter((file) => !file.startsWith('.'))
+  // 排除 404 页：它只供托管平台兜底，不是一个可被检索的独立页面，
+  // 收录进 sitemap 会让搜索引擎拿到一个 404 状态的 URL。
+  .filter((file) => file !== '404.html')
   .map((file) => (file === 'index.html' ? '/' : `/${file.replace(/\.html$/, '')}`))
   .sort()
 

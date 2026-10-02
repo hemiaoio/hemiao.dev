@@ -9,7 +9,21 @@ export default [
   },
   {
     name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**'],
+    ignores: [
+      // 构建产物。注意 eslint 会遍历点开头的目录，
+      // 所以这里的临时/遗留产物目录必须逐一列出，不能指望默认忽略。
+      '**/dist/**',
+      '**/dist-ssr/**',
+      '**/.dist-stale/**',
+      '**/.vite-ssg-temp/**',
+      '**/.vite/**',
+      '**/coverage/**',
+      '**/node_modules/**',
+      // 代理工具的工作目录，不属于项目源码
+      '**/.workbuddy/**',
+      '**/.claude/**',
+      '**/.agents/**',
+    ],
   },
   ...pluginVue.configs['flat/essential'],
   ...vueTsEslintConfig(),
